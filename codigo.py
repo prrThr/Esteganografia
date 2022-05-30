@@ -1,24 +1,25 @@
 import numpy as np
 import cv2 as cv
-import matplotlib.pyplot as plt
+from pandas import array
+#import matplotlib.pyplot as plt
 
 img = cv.imread('parrot.jpg')
 secret = cv.imread('secret.jpg')
 
 #print(f"\nDimensões da imagem: {img.shape}")
 
-# ---------------------------------#
-# PROCURANDO O ULTIMO BIT VERMELHO #
-# ---------------------------------#
+#-----------------------------------------------------------------------------------#
+#                     PROCURANDO O ULTIMO BIT VERMELHO #
+#-----------------------------------------------------------------------------------#
 altura, largura, canais = img.shape
 lastPixel = img[altura-1, largura-1, 2]
 
 #print(f"Último pixel em:  X:{altura}   Y:{largura}")
 #print(f"Nível de vermelho no ultimo pixel = {lastPixel}")
 
-#---------------------------------------------------#
-# CONVERTENDO A QUANTIDADE DE VERMELHO PARA BINÁRIO #
-#---------------------------------------------------#
+#-----------------------------------------------------------------------------------#
+#          CONVERTENDO A QUANTIDADE DE VERMELHO PARA BINÁRIO #
+#-----------------------------------------------------------------------------------#
 
 
 def bitfield(n):
@@ -45,46 +46,57 @@ def gerar_mensagem(mensagem):
 
 
 texto = "MENSAGEM SECRETA"
-arrayBits = gerar_mensagem(texto)  # Transformar o TEXTO em BINÁRIO
+arrayBits = gerar_mensagem(texto)  # Transformar o TEXTO em BñINÁRIO
 # print(arrayBits)
 
 img2 = img.copy()
 
 
-def encriptar(img):
+def encriptar(img2):
     i = 0
     pararLoop = False
-    altura, largura, canais = img.shape
+
     for y in range(altura-1, 0, -1):
         if pararLoop == True:
             break
         for x in range(largura-1, 0, -1):
-            if i == 0:
-                print("---------------------------------")
-                print(f"Valor binario inicial: {arrayBits[i]} Y:{y} x:{x}")
-                print("---------------------------------")
-
-            if arrayBits[i] == 0:
-                if img[y, x, 2] % 2 != 0:
-                    img[y, x, 2] = img[y, x, 2] - 1
-            else:
-                if img[y, x, 2] % 2 == 0:
-                    img[y, x, 2] = img[y, x, 2] - 1
-            i = i + 1
             if i == arrayBits.size-1:
                 print(f"Parou no indice {i}")
-                print(f"Valor binario final: {arrayBits[i]} Y:{y} x:{x}")
+                print(f"Valor binario final: {arrayBits[i-1]} Y:{y} x:{x+1}")
                 pararLoop = True
                 break
 
+            if i == 0:
+                print(f"Valor binario inicial: {arrayBits[i]} Y:{y} x:{x}")
+
+            if arrayBits[i] == 0 and img2[y, x, 2] % 2 != 0:
+                img2[y, x, 2] = img2[y, x, 2] - 1
+
+            if arrayBits[i] == 1 and img2[y, x, 2] % 2 == 0:
+                img2[y, x, 2] = img2[y, x, 2] - 1
+            i = i + 1
+
 
 encriptar(img2)
-i = 0
-altura, largura, canais = img.shape
-for y in range(altura-1, altura-6, -1):
-    for x in range(largura-1, largura-6, -1):
-        print(f"\nValor binario atual = {arrayBits[i]}")
-        print(f"img -> Y:{y} X:{x} - Quantidade de vermelho = {img[y, x, 2]}")
-        print(
-            f"img2 -> Y:{y} X:{x} - Quantidade de vermelho = {img2[y, x, 2]}")
-        i = i + 1
+
+
+def debuggin(altura, largura, arrayBits):
+    i = 0
+    pararLoop = False
+    for y in range(altura-1, 0, -1):
+        if pararLoop == True:
+            break
+        for x in range(largura-1, 0, -1):
+            if i == 25:
+                print(f"Parou no indice {i}")
+                print(f"Valor binario final: {arrayBits[i-1]} Y:{y} x:{x}")
+                pararLoop = True
+                break
+                
+            print(f"\nValor binario atual = {arrayBits[i]}")
+            print(f"img  -> Y:{y} X:{x} - Red Value = {img[y, x, 2]}")
+            print(f"img2 -> Y:{y} X:{x} - Red Value = {img2[y, x, 2]}")
+            i = i + 1
+
+
+debuggin(altura, largura, arrayBits)
