@@ -1,6 +1,3 @@
-#-----------------------------------------------------------------------------#
-# USAR ESTE CÓDIGO NO PROGRAMA PRINCIPAL CASO QUERIA VERIFICAR AS INFORMAÇÕES #
-#-----------------------------------------------------------------------------#
 import numpy as np
 import cv2 as cv
 
