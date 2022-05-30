@@ -98,15 +98,15 @@ def lastBits_secretos(lastReds):
 
 def main():
     img = cv.imread('parrot.jpg')
-    secret = cv.imread('secret.jpg')
+    cv.imshow("", img)
+    cv.waitKey(0)
 
-    texto = input(str("Digite sua mensagem secreta: "))
+    texto = input(str("Digite o codigo para decriptar a imagem secreta: "))
     arrayBits = gerar_mensagem(texto)  # Transformar o TEXTO em BINÁRIO
 
     print(f"\n\nDimensões da imagem: {img.shape}")
 
     altura, largura, canais = img.shape
-    lastPixel = img[altura-1, largura-1, 2]
 
     img2 = img.copy()
     encriptar(img2, arrayBits, altura, largura)
@@ -116,12 +116,19 @@ def main():
     print(f"Ultimos valores vermelhos = {lastReds}")
     lastBits = lastBits_secretos(lastReds)
     print(f"Mensagem nao traduzida = {lastBits}")
-    # print(f"ArrayBits = {arrayBits}")   Apenas para
-    # print(f"Last Reds = {lastReds}")    verificar se
-    # print(f"Last Bits = {lastBits}")    estão certos
-    #print(f"ArrayBits traduzido = {converter_mensagem(arrayBits)}")
-    print(f"\nMensagem traduzida = {converter_mensagem(lastBits)}")
+    mensagem_traduzida = converter_mensagem(lastBits)
+    #print(f"\nMensagem traduzida = {mensagem_traduzida}")
     print("Mensagem decriptada com sucesso!")
+    print("Mostrando imagem...")
+
+    if mensagem_traduzida  == 'aviao.png':
+        img2 = cv.imread('aviao.png')
+        cv.imshow("", img2)
+        cv.waitKey(0)
+        print("Processo de decriptacao executado com sucesso!")
+    else:
+        print("Processo de decriptacao executado sem sucesso!")
+
 
 
 main()
