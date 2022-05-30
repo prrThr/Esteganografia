@@ -36,7 +36,7 @@ def gerar_mensagem(mensagem):
     return arr
 
 
-texto = "MENSAGEM SECRETA"
+texto = input(str("Digite sua mensagem secreta: "))
 arrayBits = gerar_mensagem(texto)  # Transformar o TEXTO em BINÁRIO
 # print(arrayBits)                                       #* Tirar comentário após terminar
 
@@ -114,7 +114,7 @@ def lastRed_secretos(img2):
         if pararLoop == True:
             break
         for x in range(largura-1, 0, -1):
-            if i == arrayBits.size-1:
+            if i == arrayBits.size:
                 pararLoop = True
                 break
 
